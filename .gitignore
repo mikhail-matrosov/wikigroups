@@ -1,9 +1,4 @@
-build/*
-W.mat
-*.pickle
-*.txt
-*.pyc
-*.sql
-*.sql.gz
+src/build/*
+/data/*
 .project
 .pydevproject

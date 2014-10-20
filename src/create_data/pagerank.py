@@ -19,16 +19,16 @@ def pagerank(A, d=.85, tol=1e-3):
             break
     return v
 
-def load_data():
+def load_data(in_dir):
     print 'loading data...'
-    A = loadmat('W.mat')['W']
-    d2s = load(open('dense_to_sparse.pickle'))
-    i2t = load(open('ID-title_dict.pickle'))
+    A = loadmat(in_dir + 'W.mat')['W']
+    d2s = load(open(in_dir + 'dense_to_sparse.pickle'))
+    i2t = load(open(in_dir + 'ID-title_dict.pickle'))
     return A, d2s, i2t
 
-def top_k(k = 10, v = None):
+def top_k(in_dir, k = 10, v = None):
     ''' does all titles if k < 0 '''
-    A, d2s, i2t = load_data()
+    A, d2s, i2t = load_data(in_dir)
     if v is None:
         print 'doing pagerank'
         v = pagerank(A)
@@ -43,8 +43,8 @@ def top_k(k = 10, v = None):
             return 'TITLE_ERROR'
     return (get_title(x) for x in islice(t, k)) if k >= 0 else (get_title(x) for x in t)
 
-def main():
-    for i, title in enumerate(top_k(), 1):
+def main(in_dir = '../../data/'):
+    for i, title in enumerate(top_k(in_dir), 1):
         print('%2d %s' % (i, title))
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
-src/build/*
 src/*.pyc
+src/create_data/build/*
+src/create_data/*.pyc
 /data/*
 .project
 .pydevproject

@@ -5,3 +5,5 @@ W.mat
 *.pyc
 *.sql
 *.sql.gz
+.project
+.pydevproject

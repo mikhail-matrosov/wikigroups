@@ -1,2 +1,2 @@
-wikiconspiracy
+Wikigroups Project
 ==============

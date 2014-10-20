@@ -2,6 +2,7 @@ import cPickle
 from scipy.io import savemat, mmwrite
 from scipy.sparse import coo_matrix
 
+
 def create_compact_dicts(out_dir, in_dir):
     print 'compactifying...'
     sparse_to_dense, dense_to_sparse = {}, {}
@@ -24,12 +25,13 @@ def create_compact_dicts(out_dir, in_dir):
                 i = len(dense_to_sparse)
                 sparse_to_dense[ID] = i
                 dense_to_sparse[i] = ID
-    cPickle.dump(sparse_to_dense, open(out_dir + 'sparse_to_dense.pickle', 
+    cPickle.dump(sparse_to_dense, open(out_dir + 'sparse_to_dense.pickle',
                                        'w'), 2)
-    cPickle.dump(dense_to_sparse, open(out_dir + 'dense_to_sparse.pickle', 
+    cPickle.dump(dense_to_sparse, open(out_dir + 'dense_to_sparse.pickle',
                                        'w'), 2)
     print 'compactifying... Done.'
-    
+
+
 def create_matrix(in_dir):
     sparse_to_dense = cPickle.load(open(in_dir + 'sparse_to_dense.pickle'))
     print 'reading graph file and matrixifying...'
@@ -41,12 +43,12 @@ def create_matrix(in_dir):
         I.append(i)
         J.append(j)
     n = max([max(I), max(J)]) + 1
-    data = [1]*len(I)
+    data = [1] * len(I)
     print 'reading graph file and matrixifying... Done.'
-    
-    return coo_matrix((data, (I,J)), shape=(n,n), dtype='i4')
+    return coo_matrix((data, (I, J)), shape=(n, n), dtype='i4')
 
-def main(out_dir, in_dir = '../../data/'):
+
+def main(out_dir, in_dir='../../data/'):
     create_compact_dicts(out_dir, in_dir)
     W = create_matrix(in_dir)
     savemat(out_dir + 'W.mat', dict(W=W), oned_as='column')

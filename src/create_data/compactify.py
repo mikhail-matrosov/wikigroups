@@ -17,7 +17,7 @@ def create_compact_dicts(out_dir, in_dir):
         k = k + 1
         if k % step == 0:
             print "%d%% done" % (100 / mk_step * k / step)
-        # FIX id generation!!!1111
+        # FIX id generation!
         IDs = line.split()
         for id in IDs:
             ID = int(id)
@@ -35,24 +35,46 @@ def create_compact_dicts(out_dir, in_dir):
 def create_matrix(in_dir):
     sparse_to_dense = cPickle.load(open(in_dir + 'sparse_to_dense.pickle', 
                                         'rb'))
+    person_id = {}
+    with open(in_dir + 'ID-title_dict.pickle', 'rb') as f:
+        id2title = cPickle.load(f)
+    with open(in_dir + 'person_id.txt') as f:
+        for line_id in f:
+            try:
+                t = id2title[int(line_id)]
+                person_id[int(line_id)] = 0
+            except KeyError:
+                continue
+    print "Number of person's id", len(person_id)
     print 'reading graph file and matrixifying...'
     I, J = [], []
+    I_p, J_p = [], []
     for line in open(in_dir + 'graph.txt'):
         converted = [sparse_to_dense.get(int(ID)) for ID in line.split()]
+        ids = [int(ID) for ID in line.split()]
         i = converted[0]
         j = converted[1]
         I.append(i)
         J.append(j)
+        if ids[0] in person_id and ids[1] in person_id:
+            I_p.append(i)
+            J_p.append(j)
     n = max([max(I), max(J)]) + 1
+    m = max([max(I_p), max(J_p)]) + 1
     data = [1] * len(I)
+    data_p = [1] * len(I_p)
+    print 'Number cross-links from man to man', len(I_p)
     print 'reading graph file and matrixifying... Done.'
-    return coo_matrix((data, (I, J)), shape=(n, n), dtype='i4')
+    W = coo_matrix((data, (I, J)), shape=(n, n), dtype='i4')
+    A = coo_matrix((data_p, (I_p, J_p)), shape=(m, m), dtype='i4')
+    return W, A
 
 
 def main(out_dir, in_dir='../../data/'):
     create_compact_dicts(out_dir, in_dir)
-    W = create_matrix(in_dir)
+    W, A = create_matrix(in_dir)
     savemat(out_dir + 'W.mat', dict(W=W), oned_as='column')
+    savemat(out_dir + 'A.mat', dict(A=A), oned_as='column')
     # rdkl:
     # Maybe here should be: savemat('W.mat', dict(W=W), oned_as='column')
 

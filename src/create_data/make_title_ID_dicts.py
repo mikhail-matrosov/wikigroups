@@ -8,7 +8,7 @@ def process_line(line, d):
     pattern = "\((\d+),(\d+),'(.*?)','"
     for match in re.finditer(pattern, line):
         ID, namespace, name = match.groups()
-        if namespace == '0':
+        if namespace == '0' or namespace == '14':
             d[name] = int(ID)
 
 

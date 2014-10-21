@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def MinSumDistance(A, args):
+def min_sum_distance(A, args):
     '''
     Function extracts cluster based on the minimum sum of distances
     from current vertex to all vertices in cluster. If the sum of distances
@@ -18,10 +18,10 @@ def MinSumDistance(A, args):
         current_distances = [np.inf for i in xrange(A.shape[0])]
         for idx_vertex in xrange(A.shape[0]):
             if idx_vertex not in cluster:
-                d = [0 for i in xrange(len(cluster))]
+                d = [0 for i in xrange(A.shape[0])]
                 for idx_vertex_in_cluster in cluster:
                     d[idx_vertex_in_cluster] = \
-                    dist_func(A[idx_vertex], A[idx_vertex_in_cluster])
+                    dist_func(A[idx_vertex, :], A[idx_vertex_in_cluster, :])
                 current_distances[idx_vertex] = np.sum(d)
         cluster.append(np.argmin(current_distances))
     return cluster

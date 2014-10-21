@@ -11,9 +11,8 @@ def KMeans(A, args):
     Output:
     cluster - list of the row index of the vertices from the cluster
     '''
-    
     N = A.shape[0]
-    K = args['number_of_clusters'] # it is K-means, isn't it?
+    K = args['number_of_clusters']  # it is K-means, isn't it?
     N_ITERATIONS = args['max_number_of_iterations']
     VERBOSE = args['verbose_level']
     
@@ -26,7 +25,7 @@ def KMeans(A, args):
     initial_centers = np.random.choice(N, K, replace=False)
     for i,k in enumerate(initial_centers):
         clusters_membership[i+1,k] = 1
-    
+
     # iterate until converge
     ix_previous = []
     for iteration in xrange(N_ITERATIONS):
@@ -73,7 +72,3 @@ def KMeans(A, args):
     # organize return
     clusters = [np.where(clusters_membership[k+1,:])[0] for k in range(K)]
     return clusters
-    
-    
-    
-    

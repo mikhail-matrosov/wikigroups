@@ -1,4 +1,5 @@
 src/*.pyc
+src/alg/*.pyc
 src/create_data/build/*
 src/create_data/*.pyc
 /data/*

@@ -22,7 +22,7 @@ def process_line(line, t2i, i2t, outfile):
         from_page, namespace, to_page, _ = match.groups()
         if not to_page in t2i:
             continue
-        if namespace != '0':
+        if namespace != '0' and namespace != '14': 
             continue
         if not int(from_page) in i2t:
             continue

@@ -1,5 +1,5 @@
+import cPickle
 from scipy.io import loadmat
-from cPickle import load
 from numpy.linalg import norm
 from numpy import ones, divide, argsort, array
 from itertools import islice, count
@@ -24,8 +24,8 @@ def pagerank(A, d=.85, tol=1e-3):
 def load_data(in_dir):
     print 'loading data...'
     A = loadmat(in_dir + 'W.mat')['W']
-    d2s = load(open(in_dir + 'dense_to_sparse.pickle'))
-    i2t = load(open(in_dir + 'ID-title_dict.pickle'))
+    d2s = cPickle.load(open(in_dir + 'dense_to_sparse.pickle', 'rb'))
+    i2t = cPickle.load(open(in_dir + 'ID-title_dict.pickle', 'rb'))
     return A, d2s, i2t
 
 

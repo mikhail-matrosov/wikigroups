@@ -21,8 +21,8 @@ def main(out_dir, in_dir='../../data/', infile='page.sql'):
         if line[:len(crap)] == crap:
             process_line(line, t2id)
     id2t = {v: k for k, v in t2id.iteritems()}
-    cPickle.dump(t2id, open(out_dir + 'title-ID_dict.pickle', 'w'), 2)
-    cPickle.dump(id2t, open(out_dir + 'ID-title_dict.pickle', 'w'), 2)
+    cPickle.dump(t2id, open(out_dir + 'title-ID_dict.pickle', 'wb'), 2)
+    cPickle.dump(id2t, open(out_dir + 'ID-title_dict.pickle', 'wb'), 2)
     print 'making title <--> ID dictionaries... Done.'
 
 if __name__ == "__main__":

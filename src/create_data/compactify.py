@@ -26,14 +26,15 @@ def create_compact_dicts(out_dir, in_dir):
                 sparse_to_dense[ID] = i
                 dense_to_sparse[i] = ID
     cPickle.dump(sparse_to_dense, open(out_dir + 'sparse_to_dense.pickle',
-                                       'w'), 2)
+                                       'wb'), 2)
     cPickle.dump(dense_to_sparse, open(out_dir + 'dense_to_sparse.pickle',
-                                       'w'), 2)
+                                       'wb'), 2)
     print 'compactifying... Done.'
 
 
 def create_matrix(in_dir):
-    sparse_to_dense = cPickle.load(open(in_dir + 'sparse_to_dense.pickle'))
+    sparse_to_dense = cPickle.load(open(in_dir + 'sparse_to_dense.pickle', 
+                                        'rb'))
     print 'reading graph file and matrixifying...'
     I, J = [], []
     for line in open(in_dir + 'graph.txt'):

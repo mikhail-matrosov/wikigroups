@@ -36,9 +36,9 @@ def main(out_dir, in_dir='../../data/'):
     dictionary mapping page names to IDs '''
     print "building the graph..."
     crap = 'INSERT INTO `pagelinks` VALUES'
-    file_name = 'title-ID_dict.pickle'
-    t2i = cPickle.load(open(in_dir + file_name))
-    i2t = cPickle.load(open(in_dir + 'ID-title_dict.pickle'))
+    
+    t2i = cPickle.load(open(in_dir + 'title-ID_dict.pickle', 'rb'))
+    i2t = cPickle.load(open(in_dir + 'ID-title_dict.pickle', 'rb'))
 
     with open(out_dir + 'graph.txt', 'w') as outfile:
         for line in open(in_dir + 'pagelinks.sql'):

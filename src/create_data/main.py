@@ -2,6 +2,7 @@ import make_title_ID_dicts
 import make_graph
 import compactify
 import pagerank
+import get_persons
 from sys import argv
 
 
@@ -14,10 +15,11 @@ def test():
     pagelinks.sql files which can be downloaded using
     download_and_extract.sh
     '''
+    get_persons.main(out_dir=out_dir)
     make_title_ID_dicts.main(out_dir=out_dir)
     make_graph.main(out_dir=out_dir)
     compactify.main(out_dir=out_dir)
-    pagerank.main()
+#    pagerank.main()
 
 
 def actual(outfile='pageranked.txt'):

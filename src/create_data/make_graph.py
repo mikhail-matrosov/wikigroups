@@ -47,4 +47,4 @@ def main(out_dir, in_dir='../../data/'):
     print "building the graph... Done."
 
 if __name__ == "__main__":
-    main()
+    main(out_dir)

@@ -58,12 +58,13 @@ def KMeans(A, args):
                 centers = np.random.choice(not_assigned_verts,
                     min(sum(isClusterEmpty), len(not_assigned_verts)), replace=False)
                 
-                for k,c in zip(np.where(isClusterEmpty)[0], centers):
-                    clusters_membership[:,c] = 0
-                    clusters_membership[k+1,c] = 1
-                    
-                if VERBOSE>2:
-                    print "Assigned", np.where(isClusterEmpty)[0], centers
+                if len(centers):
+                    for k,c in zip(np.where(isClusterEmpty)[0], centers):
+                        clusters_membership[:,c] = 0
+                        clusters_membership[k+1,c] = 1
+                        
+                    if VERBOSE>2:
+                        print "Clusters", np.where(isClusterEmpty)[0], "initiated with", centers
             else:
                 fill_empty_clusters_FLAG = False
                 if VERBOSE>2:

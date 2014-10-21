@@ -12,7 +12,7 @@ def min_sum_distance(A, args):
     Output:
     cluster - list of the row index of the vertices fron the cluster
     '''
-    dist_func = args['distance_func']
+    dist_func = args['sim_func']
     cluster = [args['index']]
     while (len(cluster) < args['size']):
         current_distances = [np.inf for i in xrange(A.shape[0])]

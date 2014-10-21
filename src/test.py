@@ -10,7 +10,7 @@ def euc(x, y):
 A = loadmat('../data/test/W.mat')['W']
 names = loadmat('../data/test/clusterNumber.mat')['clusterNumber']
 
-d = {'size' : 30, 'distance_func' : euc, 'index' : 0}
+d = {'size' : 30, 'sim_func' : euc, 'index' : 0}
 
 cluster_idx = min_sum_distance(A, d)
 true_cluster = []

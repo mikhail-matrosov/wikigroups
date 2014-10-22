@@ -9,7 +9,7 @@ def visualizeClusters(A, clusters):
     clusters - list of the row index of the vertices from the cluster
     '''
     
-    size_treshold = 1e-4 * max([len(c) for c in clusters])
+    size_treshold = max(1e-4 * max([len(c) for c in clusters]), 1)
     clusters = [c for c in clusters if len(c)>size_treshold]
     
     K = len(clusters) # number of clusters
@@ -17,7 +17,7 @@ def visualizeClusters(A, clusters):
     
     for i in range(K):
         for j in range(K):
-            B[i,j] = A[clusters[i], :][:,clusters[j]].sum()
+            B[i,j] = A[clusters[i],:][:,clusters[j]].sum()
     
     B = np.log(B+1)
     
@@ -35,21 +35,22 @@ def visualizeClusters(A, clusters):
             edgewidth.append(edge['weight'])
 
     # node size is proportional to number of articles
-    sizes = dict(zip(G.nodes(), map(lambda x: np.sqrt(len(x)), clusters)))
+    sizes = dict(zip(G.nodes(), map(lambda x: np.sqrt(len(x)+1)/3, clusters)))
     
     labels = dict(zip(G.nodes(), map(len, clusters)))
     
     #pos = nx.spectral_layout(H)
     pos = nx.spring_layout(H)
+    #pos = nx.random_layout(H)
     
     plt.rcParams['text.usetex'] = False
     plt.figure(figsize=(8,8))
-    nx.draw_networkx_edges(H,pos,alpha=0.4,width=edgewidth, edge_color='k')
+    nx.draw_networkx_edges(H,pos,alpha=0.4,width=edgewidth, edge_color='b')
     nodesize=[sizes[v]*50 for v in H]
     nx.draw_networkx_nodes(H,pos,node_size=nodesize,node_color='r',alpha=0.8)
     nx.draw_networkx_edges(H,pos,alpha=1,node_size=0,width=1,edge_color='k')
-    nx.draw_networkx_labels(H,pos,labels,fontsize=14)
+    nx.draw_networkx_labels(H,pos,labels,fontsize=8)
 
     plt.axis('off')
-    #plt.savefig("graph.png",dpi=75)
+    plt.savefig("graph.png",dpi=300)
     plt.show() # display

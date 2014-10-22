@@ -29,8 +29,9 @@ def KMeans(A, args):
     # iterate until converge
     ix_previous = []
     for iteration in xrange(N_ITERATIONS):
-        if VERBOSE>1:
-            print 'Iteration #%d' % (iteration+1,)
+        if VERBOSE>0:
+            if VERBOSE>1 or iteration%10==9:
+                print 'Iteration #%d' % (iteration+1,)
             
         dists = A.dot(clusters_membership.T)
         ix = dists.argmax(1) # ids where to assign each vertex

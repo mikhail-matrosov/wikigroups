@@ -43,4 +43,3 @@ if __name__ == '__main__':
     get_similarity_matrix(input_matrix.tocsc())
     get_similarity_matrix(input_matrix.tocsr())
     print "Testing... Done."
-    

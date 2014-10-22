@@ -27,6 +27,7 @@ def main(out_dir):
         for line in open(out_dir + 'categorylinks.sql'):
             if line[:len(crap)] == crap: 
                 process_line(line, t2i, i2t, outfile)
+                
     print "Getting person's ID... Done."
 
 if __name__ == "__main__":

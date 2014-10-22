@@ -34,6 +34,7 @@ def create_compact_dicts(out_dir, in_dir):
 
 
 def create_matrix(in_dir):
+    # Fix: add as variable from previous results.
     sparse_to_dense = cPickle.load(open(in_dir + 'sparse_to_dense.pickle', 
                                         'rb'))
     person_id = {}
@@ -46,8 +47,9 @@ def create_matrix(in_dir):
                 t = id2title[int(line_id)]
                 if int(line_id) in person_id:
                     continue
-                person_id[int(line_id)] = person_ind
-                person_ind += 1
+                if int(line_id) in sparse_to_dense:
+                    person_id[int(line_id)] = person_ind
+                    person_ind += 1
             except KeyError:
                 continue
     cPickle.dump(person_id, open(in_dir + 'person_id2ind.pickle', 'wb'), 2)

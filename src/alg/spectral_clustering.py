@@ -1,35 +1,49 @@
-import networkx as nx
+import numpy as np
 import scipy.linalg as scl
 import scipy.sparse as scsp
 import scipy.sparse.linalg as scspl
-import numpy as np
+import scipy.io
 import matplotlib.pylab as plt
-from sklearn.cluster import KMeans
+import sklearn.cluster as skcl
+import networkx as nx
 
-def spectral_clustering(A, dim, cluster_alg, args):
+
+def spectral_clustering(A, args):
     '''
+    Function uses dimension reduction by spectral clustering 
+    to cluster with some cluster algorithm 
     '''
-    # A = scsp.csr_matrix(A)
-    # G = nx.from_scipy_sparse_matrix(A)
-    G = nx.from_numpy_matrix(A)
-    laplacian_eigval = nx.laplacian_spectrum(G)
-    plt.scatter(np.array(range(len(laplacian_eigval))) + 1, laplacian_eigval, marker = 'x', s = 90)
-    plt.show()
+    if type(A) == np.ndarray:
+        G = nx.from_numpy_matrix(A)
+    elif type(A) == scsp.csc.csc_matrix:
+        G = nx.from_scipy_sparse_matrix(A)
+    if args['show_eigenvalues']:
+        laplacian_eigval = nx.laplacian_spectrum(G)
+        plt.scatter(np.array(range(len(laplacian_eigval))) + 1, 
+                             laplacian_eigval, marker='x', s=90)
+        plt.show()
     laplacian = nx.laplacian_matrix(G)
-    max_eigvals = scspl.eigs(laplacian * 1.0, return_eigenvectors=False, k = laplacian.shape[0] - 2)
+    max_eigvals = scspl.eigs(laplacian * 1.0, return_eigenvectors=False, 
+                             k=laplacian.shape[0] - 2)
     alpha = np.amax(max_eigvals)
-    modif_laplacian = alpha*scsp.eye(laplacian.shape[0], laplacian.shape[1]) - laplacian
-    lap_eigval, lap_eigvec = scspl.eigs(modif_laplacian*1.0, k = dim)
+    modif_laplacian = alpha * scsp.eye(laplacian.shape[0], 
+                                       laplacian.shape[1]) - laplacian
+    lap_eigval, lap_eigvec = scspl.eigs(modif_laplacian * 1.0, 
+                                        k=args['dim'])
     U = lap_eigvec.real
-    print U
-    
-#    np_lapl_eigval, np_lapl_eigv = scl.eig(laplacian.todense())
-#    id_min_eigval = np.argsort(np_lapl_eigval)
-#    idx_min_eigval = np.argsort(np_lapl_eigval)[0:2]
-#    U = np_lapl_eigv[idx_min_eigval].transpose()
-#    print U
-#     eigval, laplacian_eigvec = scspl.eigsh(1.0 * laplacian, k = 32)
-    clustering = KMeans(n_clusters=args['num_clusters'])
-    clustering.fit(U)
-    print clustering.labels_
+    if args['dim'] < 1000:
+        clustering = skcl.KMeans(n_clusters=args['number_of_clusters'])
+        clustering.fit(U)
+    else:
+        clustering = skcl.MiniBatchKMeans(n_clusters=args['number_of_clusters'])
+        clustering.fit(U)
     return clustering.labels_
+
+
+if __name__ == '__main__':
+    print "Testing..."
+    test_matrix = scipy.io.loadmat('../data/test/W.mat')['W']
+    input_matrix = scipy.io.loadmat('../data/A.mat')['A']
+    args = {'dim': 2, 'number_of_clusters': 2, 'show_eigenvalues': True}
+    cl_test = spectral_clustering(test_matrix, args)
+#    cl_real = spectral_clustering(input_matrix, args)

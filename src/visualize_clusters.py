@@ -1,15 +1,27 @@
 import numpy as np
 import networkx as nx
+import scipy
 
 
-def visualizeClusters(A, clusters):
+def getTheMostImportantFromCluster(A, cluster):
+    ratings = A[cluster,:].sum(axis=1)
+    ratings = np.array(ratings).flatten()
+    return cluster[ratings.argmax()]
+    
+def convertName(name):
+    parts = name.split('_')
+    return ''.join([p[0]+"." for p in parts[:-1]])+parts[-1]
+
+def visualizeClusters(A, clusters, drawNames=1,
+    i2t = '../data/ID-title_dict.pickle',
+    pid2ind = '../data/person_id2ind.pickle'):
     '''
     Function that visualizes clusterization of the graph
     Input:
     clusters - list of the row index of the vertices from the cluster
     '''
     
-    size_treshold = max(1e-4 * max([len(c) for c in clusters]), 1)
+    size_treshold = max(0.05 * max([len(c) for c in clusters]), 1)
     clusters = [c for c in clusters if len(c)>size_treshold]
     
     K = len(clusters) # number of clusters
@@ -19,7 +31,7 @@ def visualizeClusters(A, clusters):
         for j in range(K):
             B[i,j] = A[clusters[i],:][:,clusters[j]].sum()
     
-    B = np.log(B+1)
+    B = np.sqrt(B)
     
     G = nx.DiGraph(B);
     #nx.draw_spectral(G);
@@ -35,22 +47,33 @@ def visualizeClusters(A, clusters):
             edgewidth.append(edge['weight'])
 
     # node size is proportional to number of articles
-    sizes = dict(zip(G.nodes(), map(lambda x: np.sqrt(len(x)+1)/3, clusters)))
+    sizes = dict(zip(G.nodes(), map(lambda x: np.sqrt(len(x)), clusters)))
     
-    labels = dict(zip(G.nodes(), map(len, clusters)))
+    if drawNames:
+        pid2ind = scipy.load(pid2ind)
+        i2t = scipy.load(i2t)
+        ind2pid = dict(zip(pid2ind.values(), pid2ind.keys()))
+        
+        vips = map(lambda C: getTheMostImportantFromCluster(A, C), clusters) # id of centers
+        pids = map(ind2pid.get, vips) # wiki-id
+        names = map(i2t.get, pids) # names
+        shorts = map(convertName, names) # short nice variants
+        labels = dict(zip(G.nodes(), shorts))
+    else:
+        labels = dict(zip(G.nodes(), map(len, clusters)))
     
     #pos = nx.spectral_layout(H)
     pos = nx.spring_layout(H)
     #pos = nx.random_layout(H)
     
     plt.rcParams['text.usetex'] = False
-    plt.figure(figsize=(8,8))
-    nx.draw_networkx_edges(H,pos,alpha=0.4,width=edgewidth, edge_color='b')
+    plt.figure(figsize=(20,20))
+    nx.draw_networkx_edges(H,pos,alpha=0.4,width=edgewidth, edge_color='m')
     nodesize=[sizes[v]*50 for v in H]
     nx.draw_networkx_nodes(H,pos,node_size=nodesize,node_color='r',alpha=0.8)
-    nx.draw_networkx_edges(H,pos,alpha=1,node_size=0,width=1,edge_color='k')
-    nx.draw_networkx_labels(H,pos,labels,fontsize=8)
+    nx.draw_networkx_edges(H,pos,alpha=1,node_size=0,width=1,edge_color='b')
+    nx.draw_networkx_labels(H,pos,labels,fontsize=12)
 
     plt.axis('off')
-    plt.savefig("graph.png",dpi=300)
+    plt.savefig("graph.png",dpi=200)
     plt.show() # display

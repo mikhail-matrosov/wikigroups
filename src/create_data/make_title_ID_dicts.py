@@ -26,4 +26,4 @@ def main(out_dir, in_dir='../../data/', infile='page.sql'):
     print 'making title <--> ID dictionaries... Done.'
 
 if __name__ == "__main__":
-    main()
+    main('../../data/')

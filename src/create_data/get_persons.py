@@ -1,6 +1,5 @@
-#!/usr/bin/python
-from re import finditer
-from cPickle import load
+import cPickle
+import re
 
 def process_line(line, t2i, i2t, outfile):
     ''' 
@@ -8,9 +7,8 @@ def process_line(line, t2i, i2t, outfile):
     'Living_people'
     '''
     pattern = "\((\d+),'(.*?)',(.*?)\)"
-    current_page = None
-    for match in finditer(pattern, line):
-        topage, category, t = match.groups()
+    for match in re.finditer(pattern, line):
+        topage, category, _ = match.groups()
         if category == "Living_people":
             outfile.write(topage)
             outfile.write('\n')
@@ -22,8 +20,8 @@ def main(out_dir):
     print "Getting person's ID..."
     crap = 'INSERT INTO `categorylinks` VALUES'
     pickle = 'title-ID_dict.pickle'
-    t2i = load(open(out_dir + pickle))
-    i2t = load(open(out_dir + 'ID-title_dict.pickle'))
+    t2i = cPickle.load(open(out_dir + pickle, 'rb'))
+    i2t = cPickle.load(open(out_dir + 'ID-title_dict.pickle', 'rb'))
 
     with open(out_dir + 'person_id.txt', 'w') as outfile:
         for line in open(out_dir + 'categorylinks.sql'):
@@ -32,4 +30,4 @@ def main(out_dir):
     print "Getting person's ID... Done."
 
 if __name__ == "__main__":
-    main(out_dir)
+    main("../../data/")

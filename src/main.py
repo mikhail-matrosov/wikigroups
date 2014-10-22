@@ -10,7 +10,7 @@ import clustering_error
 # Load adjacent matrix of the wiki-graph
 # A = loadmat('../data/W.mat')['W']
 #A = loadmat('../data/test/W.mat')['W']
-A = loadmat('../data/test/A.mat')['A']
+A = loadmat('../data/A.mat')['A']
 
 # Define all neccessary constants and parameters
 args = {
@@ -20,7 +20,7 @@ args = {
 
 # Use some clustering algorithm
 t = clock()
-clusters = KMeans(A,args)
+clusters = KMeans(A+A.T,args)
 print time.clock()-t
 
 np.save('../data/clusters', clusters)
@@ -28,6 +28,7 @@ np.save('../data/clusters', clusters)
 # Compare their results
 
 # Visualize their results 
-#clusters = np.load('person_clusters_ensw100c1000i.npy')
-visualizeClusters(A, clusters);
-getAcquaintances(clusters, 'Barack_Obama', '../data/people_in_the_cluster.txt')
+#clusters = np.load('../data/person_clusters_ensw500c5000i.npy')
+visualizeClusters(A+A.T, clusters);
+getAcquaintances(A+A.T, clusters, 'Vladimir_Putin',
+                 '../data/people_in_the_cluster.txt', printRating = 1)

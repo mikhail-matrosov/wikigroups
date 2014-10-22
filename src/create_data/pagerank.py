@@ -4,7 +4,6 @@ from numpy.linalg import norm
 from numpy import ones, divide, argsort, array
 from itertools import islice, count
 
-
 def pagerank(A, d=.85, tol=1e-3):
     n = A.shape[0]
     D = A.astype('i4').sum(1)
@@ -56,4 +55,4 @@ def main(in_dir='../../data/'):
         print('%2d %s' % (i, title))
 
 if __name__ == '__main__':
-    main()
+    main('../../data/')

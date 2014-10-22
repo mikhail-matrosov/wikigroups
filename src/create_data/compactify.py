@@ -53,6 +53,8 @@ def create_matrix(in_dir):
     cPickle.dump(person_id, open(in_dir + 'person_id2ind.pickle', 'wb'), 2)
     print "Number of person's id", len(person_id)
     print 'reading graph file and matrixifying...'
+    
+    # *_p variables related to person's variables.
     I, J = [], []
     I_p, J_p = [], []
     for line in open(in_dir + 'graph.txt'):
@@ -69,10 +71,10 @@ def create_matrix(in_dir):
     m = max([max(I_p), max(J_p)]) + 1
     data = [1] * len(I)
     data_p = [1] * len(I_p)
-    print 'Number cross-links from man to man', len(I_p)
-    print 'reading graph file and matrixifying... Done.'
     W = coo_matrix((data, (I, J)), shape=(n, n), dtype='i4')
     A = coo_matrix((data_p, (I_p, J_p)), shape=(m, m), dtype='i4')
+    print 'Number of cross-links from person to person', len(I_p)
+    print 'reading graph file and matrixifying... Done.'
     return W, A
 
 
@@ -85,4 +87,4 @@ def main(out_dir, in_dir='../../data/'):
     # Maybe here should be: savemat('W.mat', dict(W=W), oned_as='column')
 
 if __name__ == '__main__':
-    main()
+    main('../../data/')

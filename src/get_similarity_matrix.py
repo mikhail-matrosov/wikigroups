@@ -1,12 +1,14 @@
 import copy
 import numpy as np
 import scipy as sp
+import scipy.io
 import scipy.sparse
 from sklearn.preprocessing import normalize
 
 #-----------------------------------------------------------------------------
 def get_similarity_matrix(A, coefficients = [3, 2, 1]):
     print "Computing similarity matrix..."
+    print "input type = ", type(A)
     available_matrix_formats = [sp.sparse.coo_matrix,
                                 sp.sparse.csc_matrix,
                                 sp.sparse.csr_matrix,
@@ -20,10 +22,9 @@ def get_similarity_matrix(A, coefficients = [3, 2, 1]):
     coefficients = [3, 2, 1]
     coefficients = normalize(np.matrix(coefficients, dtype = float), 
                                    norm = 'l1')
-    # To proceed multiply we have to convert A into csr_matrix.    
-    B = normalize(sp.sparse.csr_matrix(A, dtype = float), norm = 'l1',
-                  copy = False)
-
+    
+    # To proceed multiply we have to convert A into csc_matrix.
+    B = normalize(1.0 * sp.sparse.csc_matrix(A), norm = 'l1')
     
     result_matrix = coefficients[0, 0] * B
     C = copy.deepcopy(B)
@@ -31,14 +32,15 @@ def get_similarity_matrix(A, coefficients = [3, 2, 1]):
         C = C.dot(B)
         result_matrix = result_matrix + coef * C
         
-    print "Computing similarity matrix... Done."
-    
-    print result_matrix.todense()
-    return result_matrix
+    print "Computing similarity matrix... Done. \n"
+    return result_matrix.tocoo()
 
 #-----------------------------------------------------------------------------
-
 if __name__ == '__main__':
-    input_matrix = [[1, 1, 0], [0, 1, 0], [0, 0, 1]]
-    get_similarity_matrix(np.matrix(input_matrix))
-    get_similarity_matrix(sp.sparse.coo_matrix(input_matrix))
+    print "Testing...\n"
+    input_matrix = scipy.io.loadmat('../data/A.mat')['A']
+    get_similarity_matrix(np.matrix(input_matrix.todense()))
+    get_similarity_matrix(input_matrix.tocsc())
+    get_similarity_matrix(input_matrix.tocsr())
+    print "Testing... Done."
+    

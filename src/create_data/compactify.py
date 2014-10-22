@@ -29,6 +29,7 @@ def create_compact_dicts(out_dir, in_dir):
                                        'wb'), 2)
     cPickle.dump(dense_to_sparse, open(out_dir + 'dense_to_sparse.pickle',
                                        'wb'), 2)
+    
     print 'compactifying... Done.'
 
 
@@ -36,15 +37,20 @@ def create_matrix(in_dir):
     sparse_to_dense = cPickle.load(open(in_dir + 'sparse_to_dense.pickle', 
                                         'rb'))
     person_id = {}
+    person_ind = 0
     with open(in_dir + 'ID-title_dict.pickle', 'rb') as f:
         id2title = cPickle.load(f)
     with open(in_dir + 'person_id.txt') as f:
         for line_id in f:
             try:
                 t = id2title[int(line_id)]
-                person_id[int(line_id)] = 0
+                if int(line_id) in person_id:
+                    continue
+                person_id[int(line_id)] = person_ind
+                person_ind += 1
             except KeyError:
                 continue
+    cPickle.dump(person_id, open(in_dir + 'person_id2ind.pickle', 'wb'), 2)
     print "Number of person's id", len(person_id)
     print 'reading graph file and matrixifying...'
     I, J = [], []
@@ -57,8 +63,8 @@ def create_matrix(in_dir):
         I.append(i)
         J.append(j)
         if ids[0] in person_id and ids[1] in person_id:
-            I_p.append(i)
-            J_p.append(j)
+            I_p.append(person_id[ids[0]])
+            J_p.append(person_id[ids[1]])
     n = max([max(I), max(J)]) + 1
     m = max([max(I_p), max(J_p)]) + 1
     data = [1] * len(I)

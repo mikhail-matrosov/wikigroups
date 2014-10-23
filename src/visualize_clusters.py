@@ -13,7 +13,7 @@ def convertName(name):
     parts = name.split('_')
     return ''.join([p[0]+"." for p in parts[:-1]])+parts[-1]
 
-def visualizeClusters(A, clusters, drawNames=1,
+def visualizeClusters(A, clusters, args, drawNames=1,
     i2t = '../data/ID-title_dict.pickle',
     pid2ind = '../data/person_id2ind.pickle'):
     '''
@@ -69,7 +69,7 @@ def visualizeClusters(A, clusters, drawNames=1,
     #pos = nx.random_layout(H)
     
     plt.rcParams[u'text.usetex'] = False
-    plt.figure(figsize=(20,20))
+    plt.figure(figsize=(10,10))
     nx.draw_networkx_edges(H,pos,alpha=0.4,width=edgewidth, edge_color='m')
     nodesize=[sizes[v]*50 for v in H]
     nx.draw_networkx_nodes(H,pos,node_size=nodesize,node_color='r',alpha=0.8)
@@ -77,5 +77,5 @@ def visualizeClusters(A, clusters, drawNames=1,
     nx.draw_networkx_labels(H,pos,labels,fontsize=12)
 
     plt.axis('off')
-    plt.savefig('graph.png',dpi=200)
+    plt.savefig('../data/sp_cl/' + 'graph_' + args['center_person'] + str(K) + '.png', dpi=200)
     plt.show() # display

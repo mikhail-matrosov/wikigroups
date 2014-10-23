@@ -5,13 +5,12 @@ def getAcquaintances(A, clusters, person = 'Barack_Obama',
     outputfile = '../data/people_in_the_cluster.txt',
     t2i = '../data/title-ID_dict.pickle',
     i2t = '../data/ID-title_dict.pickle',
-    pid2ind = '../data/person_id2ind.pickle', 
+    pid2ind = '../data/person_id2ind_6800.pickle', 
     printRating = 0):
         
     t2i = scipy.load(t2i)
     pid2ind = scipy.load(pid2ind)
 
-    print person
     if person in t2i:
         ix = t2i[person]
         if ix:
@@ -34,7 +33,7 @@ def getAcquaintances(A, clusters, person = 'Barack_Obama',
     
     # find the cluster that contains the person
     cluster = np.where(map(lambda x: ix in x, clusters))[0]
-    ids = clusters[cluster[0]]
+    ids = np.array(clusters[cluster[0]])
     
     if len(cluster):
         print person, 'is acquaintant with', len(ids), 'people'
@@ -46,7 +45,7 @@ def getAcquaintances(A, clusters, person = 'Barack_Obama',
     ind2pid = dict(zip(pid2ind.values(), pid2ind.keys()))
     
     # get ratings
-    ratings = A[ids,:].sum(axis=1)
+    ratings = A[ids,:][:,ids].sum(axis=1) # only inside cluster
     ratings = np.array(ratings).flatten()
     
     # sort people by rating
@@ -67,3 +66,4 @@ def getAcquaintances(A, clusters, person = 'Barack_Obama',
     f = open(outputfile, 'w')
     f.write(string)
     f.close()
+    

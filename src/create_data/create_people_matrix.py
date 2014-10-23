@@ -43,17 +43,21 @@ def choose_submatrix(size):
     val = [(i, j) for (i, j) in A.keys() if not i in removed_rows
                                         and not j in removed_rows]
     
+    
     # Translate from new B index to old A index.
     tr_dict = dict(enumerate([i for i in xrange(A.shape[0]) 
                         if not i in removed_rows]))
     
+    tr_dict_reversed = {v: k for k, v in tr_dict.items()}
     
     
-    rows = [i for (i, _) in val]
-    cols = [j for (_, j) in val]
+    rows = [tr_dict_reversed[i] for (i, _) in val]
+    cols = [tr_dict_reversed[j] for (_, j) in val]
     data = [1 for (_, _) in val]
+
     
-    B = scipy.sparse.coo_matrix((data, (rows, cols)))
+    B = scipy.sparse.coo_matrix((data, (rows, cols)), shape = (len(tr_dict), 
+                                                               len(tr_dict)))
     
     f = open('../../data/person_id2ind.pickle', 'rb')
     id_to_ind = cPickle.load(f)
@@ -61,19 +65,21 @@ def choose_submatrix(size):
     
     ind_to_id = {v: k for k, v in id_to_ind.items()}
     
-    new_dict = {ind_to_id[tr_dict[i]] for i in tr_dict}
+    new_dict = {ind_to_id[tr_dict[i]] : i for i in tr_dict}
     
     f = open('../../data/person_id2ind_'+  str(A.shape[0] - 
                                                len(removed_rows))\
              +  '.pickle', 'wb')
+    
     
     cPickle.dump(new_dict, f)    
     f.close()
     
     savemat("../../data/" + 'A_' + str(A.shape[0] - len(removed_rows)) + \
             '.mat', dict(A = B), oned_as='column')
+    print B.shape
     
     
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
-    choose_submatrix(6000)
+    choose_submatrix(6800)

@@ -55,8 +55,8 @@ if __name__ == '__main__':
     test_matrix = scipy.io.loadmat('../data/test/W.mat')['W']
     # input_matrix = scipy.io.loadmat('../data/A.mat')['A']
     args = {'dim': 3, 'number_of_clusters': 3, 'show_eigenvalues': False}
-    cl_test = spectral_clustering(test_matrix, args)
-    # cl_real = spectral_clustering(input_matrix, args)
+    cl_cent_person, cl_test = spectral_clustering(test_matrix, args)
+    # cl_cent_person, cl_real = spectral_clustering(input_matrix, args)
     with open('../../data/cluster_id.txt' , 'w') as f:
         for i in cl_test:
             f.write(str(i) + '\n')

@@ -55,7 +55,7 @@ def choose_submatrix(size):
     cols = [tr_dict_reversed[j] for (_, j) in val]
     data = [1 for (_, _) in val]
 
-    
+    print len(data)
     B = scipy.sparse.coo_matrix((data, (rows, cols)), shape = (len(tr_dict), 
                                                                len(tr_dict)))
     
@@ -82,4 +82,4 @@ def choose_submatrix(size):
     
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
-    choose_submatrix(6800)
+    choose_submatrix(7000)

@@ -15,7 +15,7 @@ A = loadmat('../data/A.mat')['A']
 # Define all neccessary constants and parameters
 args = {
 'max_number_of_iterations': 5000,
-'number_of_clusters': 500,
+'number_of_clusters': 100,
 'verbose_level': 1}
 
 # Use some clustering algorithm
@@ -30,5 +30,5 @@ np.save('../data/clusters', clusters)
 # Visualize their results 
 #clusters = np.load('../data/person_clusters_ensw500c5000i.npy')
 visualizeClusters(A+A.T, clusters);
-getAcquaintances(A+A.T, clusters, 'Vladimir_Putin',
+getAcquaintances(A+A.T, clusters, 'Dmitry_Medvedev',
                  '../data/people_in_the_cluster.txt', printRating = 1)

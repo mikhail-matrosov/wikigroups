@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 import scipy
+import matplotlib.pylab as plt 
 
 
 def getTheMostImportantFromCluster(A, cluster):
@@ -21,11 +22,12 @@ def visualizeClusters(A, clusters, drawNames=1,
     clusters - list of the row index of the vertices from the cluster
     '''
     
-    size_treshold = max(0.05 * max([len(c) for c in clusters]), 1)
+    # size_treshold = max(0.05 * max([len(c) for c in clusters]), 1)
+    size_treshold = 0
     clusters = [c for c in clusters if len(c)>size_treshold]
     
-    K = len(clusters) # number of clusters
-    B = np.zeros((K,K)) # clusters' network
+    K = len(clusters) #  number of clusters
+    B = np.zeros((K,K)) #  clusters' network
     
     for i in range(K):
         for j in range(K):
@@ -66,7 +68,7 @@ def visualizeClusters(A, clusters, drawNames=1,
     pos = nx.spring_layout(H)
     #pos = nx.random_layout(H)
     
-    plt.rcParams['text.usetex'] = False
+    plt.rcParams[u'text.usetex'] = False
     plt.figure(figsize=(20,20))
     nx.draw_networkx_edges(H,pos,alpha=0.4,width=edgewidth, edge_color='m')
     nodesize=[sizes[v]*50 for v in H]
@@ -75,5 +77,5 @@ def visualizeClusters(A, clusters, drawNames=1,
     nx.draw_networkx_labels(H,pos,labels,fontsize=12)
 
     plt.axis('off')
-    plt.savefig("graph.png",dpi=200)
+    plt.savefig('graph.png',dpi=200)
     plt.show() # display

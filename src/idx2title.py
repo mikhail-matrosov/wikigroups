@@ -1,8 +1,8 @@
 from cPickle import load
 
 
-def Visualize(vertex_index_list, index2id_filename='dense_to_sparse.pickle',
-              id2title_filename='ID-title_dict.pickle'):
+def visualize(vertex_index_list, id2index_filename='person_id2ind.pickle',
+              id2title_filename='ID-title_dict.pickle', path='../data/'):
     '''
     Convert obtained list of vertex indices belonging to the cluster into
     the list of the corresponding page titles
@@ -14,10 +14,15 @@ def Visualize(vertex_index_list, index2id_filename='dense_to_sparse.pickle',
     title - list of titles
     '''
     title = []
-    with open(index2id_filename, 'rb') as f:
-        ind2id = load(f)
-    with open(id2title_filename, 'rb') as f:
-        id2title = load(f)
-    for key in vertex_index_list:
-        title.append(id2title[ind2id[key]])
+    with open(path + id2index_filename, 'rb') as f:
+        id2ind = load(f)
+    with open(path + id2title_filename, 'rb') as f:
+        id2title = load(f) 
+    key = 0
+    for ind in vertex_index_list:
+        for k in id2ind:
+            if id2ind[k] == ind:
+                key = k
+                break
+        title.append(id2title[key])
     return title

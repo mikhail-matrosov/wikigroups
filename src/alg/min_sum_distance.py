@@ -23,7 +23,7 @@ def min_sum_distance(A, args):
     
     while (True):
         print 'Current size of cluster:', len(cluster)
-        if (len(cluster) > args['size']):
+        if (len(cluster) > args['max_size']):
             break
         
         similarities = np.zeros(A.shape[0])

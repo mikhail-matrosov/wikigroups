@@ -12,16 +12,16 @@ def min_sum_distance(A, args):
     Output:
     cluster - list of the row index of the vertices fron the cluster
     '''
-    sim_func = args['sim_func']
+    S = args['matrix_pairwise_sim'].tocsr()
     cluster = [args['index']]
     while (len(cluster) < args['size']):
+        print 'Current size of cluster', len(cluster)
         current_distances = [0 for i in xrange(A.shape[0])]
         for idx_vertex in xrange(A.shape[0]):
             if idx_vertex not in cluster:
                 s = [0 for i in xrange(A.shape[0])]
                 for idx_vertex_in_cluster in cluster:
-                    s[idx_vertex_in_cluster] = \
-                    sim_func(A[idx_vertex, :], A[idx_vertex_in_cluster, :])
+                    s[idx_vertex_in_cluster] = S[idx_vertex, idx_vertex_in_cluster]
                 current_distances[idx_vertex] = np.sum(s)
         cluster.append(np.argmax(current_distances))
     return cluster

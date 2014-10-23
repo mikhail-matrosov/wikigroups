@@ -3,7 +3,7 @@ import math
 
 import numpy as np
 
-
+#-----------------------------------------------------------------------------
 def min_sum_distance(A, args):
     '''
     Function extracts cluster based on the minimum sum of distances
@@ -42,10 +42,13 @@ def min_sum_distance(A, args):
         print 'Similarity:', max_similarity / (len(cluster) + 1), '\n'
         if len(cluster) > 0 and \
             (1 + 1.0 / math.log(len(cluster) + 1, 2)) * max_similarity < \
-             (1 + 1.0 / len(cluster)) * last_similarity:
+             (1 + 1.0 / len(cluster)) * last_similarity and \
+             len(cluster) > args['min_size']:
             print 'Cluster found. Algorithm was stopped.'
             break
         last_similarity = max_similarity                       
         cluster[max_sim_index] = 1
         #print cluster
     return cluster.keys()
+
+#-----------------------------------------------------------------------------

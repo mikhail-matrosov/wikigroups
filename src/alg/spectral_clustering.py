@@ -41,7 +41,13 @@ def spectral_clustering(A, args):
     else:
         clustering = skcl.MiniBatchKMeans(n_clusters=args['number_of_clusters'])
         clustering.fit(U)
-    return clustering.labels_
+    center_person_cluster_id = clustering.labels_[args['index']]
+    center_person_cluster = [i for i in xrange(len(clustering.labels_)) 
+                             if clustering.labels_[i] == center_person_cluster_id]
+    
+    cluster = [[i for i in xrange(len(clustering.labels_)) if clustering.labels_[i] == j] 
+                for j in xrange(args['number_of_clusters'])]
+    return center_person_cluster, cluster
 
 
 if __name__ == '__main__':

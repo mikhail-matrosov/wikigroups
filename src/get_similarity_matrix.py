@@ -20,7 +20,7 @@ def get_similarity_matrix(A, coefficients = [3, 2, 1]):
         return None
     
     # Result matrix is coef * (A^i) (elementwise).
-    coefficients = [3, 2, 1]
+    #coefficients = [3, 2, 1]
     coefficients = normalize(np.matrix(coefficients, dtype = float), 
                                    norm = 'l1')
     

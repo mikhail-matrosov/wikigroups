@@ -31,7 +31,9 @@ def spectral_clustering(A, args):
                                         k=20)
     if args['show_eigenvalues']:
         print 'Show eigenvalues...'
-        plt.scatter(np.array(range(len(lap_eigval))) + 1, np.sort(-lap_eigval.real + alpha), marker='x', s=90)
+        plt.scatter(np.array(range(len(lap_eigval))) + 1, 
+                    np.sort(-lap_eigval.real + alpha, reverse = True), 
+                    marker='.', s=90)
         plt.show()
     U = lap_eigvec[:, 0:args['dim']].real
     print 'Start clustering...'

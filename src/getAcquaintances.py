@@ -45,6 +45,7 @@ def getAcquaintances(A, clusters, person = 'Barack_Obama',
     ind2pid = dict(zip(pid2ind.values(), pid2ind.keys()))
     
     # get ratings
+    # ratings = A[ids,:].sum(axis=1)  # among all vertex
     ratings = A[ids,:][:,ids].sum(axis=1) # only inside cluster
     ratings = np.array(ratings).flatten()
     

@@ -29,6 +29,7 @@ def get_similarity_matrix(A, coefficients = [3, 2, 1]):
     
     result_matrix = coefficients[0, 0] * B
     C = copy.deepcopy(B)
+    print 'Coefficients in matrix sum:'
     for coef in coefficients[0, 1:]:
         print coef
         C = C * B

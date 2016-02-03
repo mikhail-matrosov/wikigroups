@@ -6,4 +6,4 @@ Participants:
 * Maria Ryskina
 * Mikhail Matrosov
   
-Presentation: [link](https://www.dropbox.com/s/xdyf82t737qbfbz/presentation.pdf?dl=0)
+Presentation: [link](https://www.dropbox.com/s/rikw0a4b8pgqluf/Wiki-groups_presentation.pdf?dl=0)
